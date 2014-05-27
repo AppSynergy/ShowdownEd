@@ -1,0 +1,15 @@
+/* line 1, ../sass/sass/screen.sass */
+.showdownEd-editor {
+  outline: 1px solid #bbbbbb;
+  padding: 20px;
+}
+
+/* line 5, ../sass/sass/screen.sass */
+.col {
+  min-height: 400px;
+}
+/* line 7, ../sass/sass/screen.sass */
+.col textarea {
+  width: 100%;
+  min-height: 400px;
+}
