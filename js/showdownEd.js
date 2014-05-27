@@ -18,7 +18,7 @@ app.controller('Editor', function($scope, $http, $sanitize) {
   updateHTML = function(md) {
     var html;
     html = converter.makeHtml(md);
-    $scope.currentMarkdown = md;
+    $scope.currentMarkdown = angular.copy(md);
     return $scope.currentHtml = html;
   };
   $scope.updateMd = function(md) {
@@ -32,7 +32,9 @@ app.controller('Editor', function($scope, $http, $sanitize) {
       url: 'markdown/' + fn
     }).success(function(data, status, headers, config) {
       $scope.haveFileSelected = true;
-      return updateHTML(data);
+      updateHTML(data);
+      $scope.currentMarkdown = data;
+      return console.log($scope.currentMarkdown);
     });
   };
   return true;

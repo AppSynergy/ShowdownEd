@@ -1,15 +1,9 @@
-# Hello There this is demo 2
-This is [an example](http://example.com/ "I'm the title") of an inline link.
-	
-### Define a list below
-	
-+ Get milk food
-+ Buy food
-	
-This is paragraph text with some **bold** or some _italics_ how about _**both**_ ?
+##This is demo 2
 
-**Code** block below:
-	
-	function hello() { 
-	  alert('Hello world!'); 
-	}
+Foo
+
+Bar
+
+* la
+* lala
+* lalala

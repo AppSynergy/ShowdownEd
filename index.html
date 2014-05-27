@@ -13,6 +13,7 @@
 <body>
 	<div class="container">
 			<div ng-controller="Editor" class="showdownEd-editor">
+				
 				<h1>ShowdownEd - Markdown Editor</h1>
 				Select file: <select
 					ng-model="selectedFile"
@@ -20,6 +21,12 @@
 					ng-change="selectFile();"
 				></select>
 				<hr>
+				
+				<div ng-switch on="editor.$pristine">
+					<p ng-switch-when="false">Unsaved changes!</p>
+					<p ng-switch-when="true">Everything is up to date.</p>
+				</div>
+				
 				<div class="row">
 					<div class="col col-xs-6" data-markdown ng-switch on="haveFileSelected">
 						<form name="editor">
