@@ -22,8 +22,12 @@
 				<hr>
 				<div class="row">
 					<div class="col col-xs-6" data-markdown ng-switch on="haveFileSelected">
-						<textarea ng-switch-when="true"
-							ng-bind="currentMarkdown"></textarea>
+						<form name="editor">
+						<textarea name="markdown"
+							ng-switch-when="true"
+							ng-change="updateMd(currentMarkdown);"
+							ng-model="currentMarkdown"></textarea>
+						</form>
 					</div>
 					<div class="col col-xs-6" data-html>
 						<div ng-bind-html="currentHtml"></div>
@@ -33,6 +37,3 @@
 	</div><!-- container -->
 </body>
 </html>
-
-
-

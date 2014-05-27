@@ -7,6 +7,7 @@ app.controller('Editor', function($scope, $http, $sanitize) {
   var converter, updateHTML;
   converter = new Showdown.converter();
   $scope.haveFileSelected = false;
+  $scope.currentMarkdown = '';
   $scope.files = [
     {
       name: 'demo.md'
@@ -19,6 +20,9 @@ app.controller('Editor', function($scope, $http, $sanitize) {
     html = converter.makeHtml(md);
     $scope.currentMarkdown = md;
     return $scope.currentHtml = html;
+  };
+  $scope.updateMd = function(md) {
+    return updateHTML(md);
   };
   $scope.selectFile = function() {
     var fn;
