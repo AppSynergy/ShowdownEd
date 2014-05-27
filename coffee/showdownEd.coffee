@@ -21,7 +21,11 @@ app.controller 'Editor', ($scope, $http, $sanitize) ->
 		#console.log html
 		$scope.currentMarkdown = angular.copy md
 		$scope.currentHtml = html
-
+	
+	# Keep an eye on our scope
+	#$scope.$watch (scope) ->
+		#console.log scope.currentMarkdown
+	
 	# Update markdown
 	$scope.updateMd = (md) ->
 		#console.log md
@@ -32,11 +36,13 @@ app.controller 'Editor', ($scope, $http, $sanitize) ->
 		#console.log $scope.selectedFile
 		fn = $scope.selectedFile.name
 		$http({method: 'GET', url: 'markdown/'+fn})
-			.success (data, status, headers, config) ->
+			.success (data, status, headers, config) =>
 				$scope.haveFileSelected = true
 				updateHTML data
+				if $scope.currentMarkdown.length > 0
+					$scope.currentMarkdown = ''
 				$scope.currentMarkdown = data
-				#$scope.editor.$setPristine()
+				$scope.editor.$setPristine()
 				#$scope.editor.markdown = data
-				console.log $scope.currentMarkdown
+				#console.log $scope.currentMarkdown
 	true

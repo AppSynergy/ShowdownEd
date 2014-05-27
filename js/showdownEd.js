@@ -25,7 +25,8 @@ app.controller('Editor', function($scope, $http, $sanitize) {
     return updateHTML(md);
   };
   $scope.selectFile = function() {
-    var fn;
+    var fn,
+      _this = this;
     fn = $scope.selectedFile.name;
     return $http({
       method: 'GET',
@@ -33,8 +34,11 @@ app.controller('Editor', function($scope, $http, $sanitize) {
     }).success(function(data, status, headers, config) {
       $scope.haveFileSelected = true;
       updateHTML(data);
+      if ($scope.currentMarkdown.length > 0) {
+        $scope.currentMarkdown = '';
+      }
       $scope.currentMarkdown = data;
-      return console.log($scope.currentMarkdown);
+      return $scope.editor.$setPristine();
     });
   };
   return true;
