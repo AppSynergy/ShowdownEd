@@ -1,45 +1,51 @@
-/* line 10, ../sass/sass/screen.sass */
+/* line 11, ../sass/sass/screen.sass */
+.controls select {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* line 16, ../sass/sass/screen.sass */
 .col {
   margin-bottom: 30px;
 }
-/* line 12, ../sass/sass/screen.sass */
+/* line 18, ../sass/sass/screen.sass */
 .col textarea {
   min-height: 420px;
 }
 
-/* line 17, ../sass/sass/screen.sass */
+/* line 23, ../sass/sass/screen.sass */
 table.diff tbody {
   font-family: monospace;
 }
-/* line 19, ../sass/sass/screen.sass */
+/* line 25, ../sass/sass/screen.sass */
 table.diff tbody th {
   vertical-align: top;
   text-align: right;
   padding: 3px;
   color: #777777;
 }
-/* line 24, ../sass/sass/screen.sass */
+/* line 30, ../sass/sass/screen.sass */
 table.diff tbody td {
   padding: 3px;
   border-bottom: 1px solid white;
 }
-/* line 27, ../sass/sass/screen.sass */
+/* line 33, ../sass/sass/screen.sass */
 table.diff tbody td.equal {
   background-color: #f4f4f4;
 }
-/* line 29, ../sass/sass/screen.sass */
+/* line 35, ../sass/sass/screen.sass */
 table.diff tbody td.replace {
   background-color: #d1fbd1;
 }
-/* line 31, ../sass/sass/screen.sass */
+/* line 37, ../sass/sass/screen.sass */
 table.diff tbody td.delete {
   background-color: #ffd4d4;
 }
-/* line 33, ../sass/sass/screen.sass */
+/* line 39, ../sass/sass/screen.sass */
 table.diff tbody td.empty {
   background-color: #ffebd4;
 }
-/* line 35, ../sass/sass/screen.sass */
+/* line 41, ../sass/sass/screen.sass */
 table.diff tbody td.insert {
   background-color: #d1eaf8;
 }
