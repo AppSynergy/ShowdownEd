@@ -1,36 +1,45 @@
-/* line 1, ../sass/sass/screen.sass */
-.showdownEd-editor {
-  outline: 1px solid #bbbbbb;
-  padding: 20px;
-}
-
-/* line 5, ../sass/sass/screen.sass */
+/* line 10, ../sass/sass/screen.sass */
 .col {
-  min-height: 400px;
+  margin-bottom: 30px;
 }
-/* line 7, ../sass/sass/screen.sass */
+/* line 12, ../sass/sass/screen.sass */
 .col textarea {
-  width: 100%;
-  min-height: 400px;
+  min-height: 420px;
 }
 
-/* line 13, ../sass/sass/screen.sass */
-table.diff td.replace {
-  background-color: green;
-}
-/* line 15, ../sass/sass/screen.sass */
-table.diff td.delete {
-  background-color: purple;
-}
 /* line 17, ../sass/sass/screen.sass */
-table.diff td.empty {
-  background-color: red;
+table.diff tbody {
+  font-family: monospace;
 }
 /* line 19, ../sass/sass/screen.sass */
-table.diff td.equal {
-  background-color: blue;
+table.diff tbody th {
+  vertical-align: top;
+  text-align: right;
+  padding: 3px;
+  color: #777777;
 }
-/* line 21, ../sass/sass/screen.sass */
-table.diff td.insert {
-  background-color: yellow;
+/* line 24, ../sass/sass/screen.sass */
+table.diff tbody td {
+  padding: 3px;
+  border-bottom: 1px solid white;
+}
+/* line 27, ../sass/sass/screen.sass */
+table.diff tbody td.equal {
+  background-color: #f4f4f4;
+}
+/* line 29, ../sass/sass/screen.sass */
+table.diff tbody td.replace {
+  background-color: #d1fbd1;
+}
+/* line 31, ../sass/sass/screen.sass */
+table.diff tbody td.delete {
+  background-color: #ffd4d4;
+}
+/* line 33, ../sass/sass/screen.sass */
+table.diff tbody td.empty {
+  background-color: #ffebd4;
+}
+/* line 35, ../sass/sass/screen.sass */
+table.diff tbody td.insert {
+  background-color: #d1eaf8;
 }

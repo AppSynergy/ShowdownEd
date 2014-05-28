@@ -24,16 +24,16 @@
 				></select>
 				<hr>
 			
-				<div ng-switch on="editor.$pristine">
-					<p ng-switch-when="false">Unsaved changes!</p>
-					<p ng-switch-when="true">Everything is up to date.</p>
+				<div ng-switch on="editor.$pristine" ng-show="haveFileSelected">
+					<p class="alert alert-warning" ng-switch-when="false">Unsaved changes!</p>
+					<p class="alert alert-success" ng-switch-when="true">Everything is up to date.</p>
 				</div>
 				
 				<div class="row">
 					<div class="col col-sm-4" data-markdown ng-switch on="haveFileSelected">
 						<h3>Edit here</h3><hr>
 						<form name="editor">
-						<textarea name="markdown"
+						<textarea name="markdown" class="form-control"
 							ng-switch-when="true"
 							ng-change="updateMd(markdown.current);"
 							ng-model="markdown.current"></textarea>

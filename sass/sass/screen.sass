@@ -1,22 +1,36 @@
-.showdownEd-editor
-	outline: 1px solid #bbb
-	padding: 20px
+// colors
+$midgrey: #777
+$lightgrey: #F4F4F4
+$red: #FFD4D4
+$blue: #D1EAF8
+$green: #D1FBD1
+$orange: #FFEBD4
 
+// general layout
 .col
-	min-height: 400px
+	margin-bottom: 30px
 	textarea
-		width: 100%
-		min-height: 400px
+		// textareas are haunted
+		min-height: 420px
 		
-// DiffView
-table.diff
-	td.replace
-		background-color: green
-	td.delete
-		background-color: purple
-	td.empty
-		background-color: red
+// diff table
+table.diff tbody
+	font-family: monospace
+	th
+		vertical-align: top
+		text-align: right
+		padding: 3px
+		color: $midgrey
+	td
+		padding: 3px
+		border-bottom: 1px solid white
 	td.equal
-		background-color: blue
+		background-color: $lightgrey
+	td.replace
+		background-color: $green
+	td.delete
+		background-color: $red
+	td.empty
+		background-color: $orange
 	td.insert
-		background-color: yellow
+		background-color: $blue
