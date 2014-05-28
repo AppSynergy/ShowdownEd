@@ -3,11 +3,12 @@ var app;
 
 app = angular.module('showdownEd', ['ngSanitize']);
 
-app.controller('Editor', function($scope, $http, $sanitize) {
-  var converter, updateHTML;
+app.controller('Editor', function($scope, $http, $sanitize, $sce) {
+  var converter, diffMd, updateHtml;
   converter = new Showdown.converter();
   $scope.haveFileSelected = false;
   $scope.currentMarkdown = '';
+  $scope.mdDiffView = "<h1>pirates!</h1>";
   $scope.files = [
     {
       name: 'demo.md'
@@ -15,14 +16,37 @@ app.controller('Editor', function($scope, $http, $sanitize) {
       name: 'demo2.md'
     }
   ];
-  updateHTML = function(md) {
+  updateHtml = function(md) {
     var html;
     html = converter.makeHtml(md);
     $scope.currentMarkdown = angular.copy(md);
     return $scope.currentHtml = html;
   };
+  diffMd = function() {
+    var newtxt, oldtxt, opcodes, sm;
+    oldtxt = difflib.stringAsLines($scope.originalMarkdown);
+    newtxt = difflib.stringAsLines($scope.currentMarkdown);
+    console.log(oldtxt);
+    console.log(newtxt);
+    sm = new difflib.SequenceMatcher(oldtxt, newtxt);
+    opcodes = sm.get_opcodes();
+    return diffview.buildView({
+      baseTextLines: oldtxt,
+      newTextLines: newtxt,
+      opcodes: opcodes,
+      baseTextName: "Base Text",
+      newTextName: "New Text",
+      contextSize: 0,
+      viewType: 0
+    });
+  };
   $scope.updateMd = function(md) {
-    return updateHTML(md);
+    updateHtml(md);
+    $scope.mdDiffView = diffMd();
+  };
+  $scope.toTrusted = function(html) {
+    console.log(html);
+    return $sce.trustAsHtml(html.outerHTML);
   };
   $scope.selectFile = function() {
     var fn,
@@ -33,12 +57,11 @@ app.controller('Editor', function($scope, $http, $sanitize) {
       url: 'markdown/' + fn
     }).success(function(data, status, headers, config) {
       $scope.haveFileSelected = true;
-      updateHTML(data);
-      if ($scope.currentMarkdown.length > 0) {
-        $scope.currentMarkdown = '';
-      }
+      updateHtml(data);
       $scope.currentMarkdown = data;
-      return $scope.editor.$setPristine();
+      $scope.originalMarkdown = data;
+      $scope.editor.$setPristine();
+      return $scope.mdDiffView = "<h1>zombies!</h1>";
     });
   };
   return true;

@@ -9,6 +9,8 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.16/angular-sanitize.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
 	<script type="text/javascript" src="js/showdownEd.js"></script>
+	<script type="text/javascript" src="jsdifflib/diffview.js"></script>
+	<script type="text/javascript" src="jsdifflib/difflib.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -40,6 +42,10 @@
 						<div ng-bind-html="currentHtml"></div>
 					</div>
 				</div><!-- row -->
+				
+				<div ng-bind-html="toTrusted(mdDiffView)">
+				</div>
+				
 			</div>
 	</div><!-- container -->
 </body>
