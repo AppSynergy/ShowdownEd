@@ -8,7 +8,6 @@ app.controller('Editor', function($scope, $http, $sanitize, $sce) {
   converter = new Showdown.converter();
   $scope.haveFileSelected = false;
   $scope.currentMarkdown = '';
-  $scope.mdDiffView = "<h1>pirates!</h1>";
   $scope.files = [
     {
       name: 'demo.md'
@@ -45,7 +44,6 @@ app.controller('Editor', function($scope, $http, $sanitize, $sce) {
     $scope.mdDiffView = diffMd();
   };
   $scope.toTrusted = function(html) {
-    console.log(html);
     return $sce.trustAsHtml(html.outerHTML);
   };
   $scope.selectFile = function() {
@@ -60,8 +58,7 @@ app.controller('Editor', function($scope, $http, $sanitize, $sce) {
       updateHtml(data);
       $scope.currentMarkdown = data;
       $scope.originalMarkdown = data;
-      $scope.editor.$setPristine();
-      return $scope.mdDiffView = "<h1>zombies!</h1>";
+      return $scope.editor.$setPristine();
     });
   };
   return true;

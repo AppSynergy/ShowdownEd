@@ -13,3 +13,24 @@
   width: 100%;
   min-height: 400px;
 }
+
+/* line 13, ../sass/sass/screen.sass */
+table.diff td.replace {
+  background-color: green;
+}
+/* line 15, ../sass/sass/screen.sass */
+table.diff td.delete {
+  background-color: purple;
+}
+/* line 17, ../sass/sass/screen.sass */
+table.diff td.empty {
+  background-color: red;
+}
+/* line 19, ../sass/sass/screen.sass */
+table.diff td.equal {
+  background-color: blue;
+}
+/* line 21, ../sass/sass/screen.sass */
+table.diff td.insert {
+  background-color: yellow;
+}
