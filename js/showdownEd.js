@@ -4,12 +4,14 @@ var app;
 app = angular.module('showdownEd', ['ngSanitize']);
 
 app.controller('Editor', function($scope, $http, $sanitize, $sce) {
-  var converter, diffMd, updateHtml;
+  var converter, createMarkdownDiff;
   converter = new Showdown.converter();
   $scope.haveFileSelected = false;
   $scope.markdown = {
     current: '',
-    original: ''
+    original: '',
+    diff: '',
+    html: ''
   };
   $scope.files = [
     {
@@ -18,33 +20,25 @@ app.controller('Editor', function($scope, $http, $sanitize, $sce) {
       name: 'demo2.md'
     }
   ];
-  updateHtml = function(md) {
-    var html;
-    html = converter.makeHtml(md);
-    $scope.markdown.current = angular.copy(md);
-    return $scope.htmlPreview = html;
-  };
-  diffMd = function() {
+  createMarkdownDiff = function(md) {
     var newtxt, oldtxt, opcodes, sm;
     oldtxt = difflib.stringAsLines($scope.markdown.original);
-    newtxt = difflib.stringAsLines($scope.markdown.current);
-    console.log(oldtxt);
-    console.log(newtxt);
+    newtxt = difflib.stringAsLines(md);
     sm = new difflib.SequenceMatcher(oldtxt, newtxt);
     opcodes = sm.get_opcodes();
     return diffview.buildView({
       baseTextLines: oldtxt,
       newTextLines: newtxt,
       opcodes: opcodes,
-      baseTextName: "Base Text",
+      baseTextName: "Original Text",
       newTextName: "New Text",
       contextSize: 0,
       viewType: 0
     });
   };
   $scope.updateMd = function(md) {
-    updateHtml(md);
-    $scope.mdDiffView = diffMd();
+    $scope.markdown.html = converter.makeHtml(md);
+    $scope.markdown.diff = createMarkdownDiff(md);
   };
   $scope.toTrusted = function(html) {
     return $sce.trustAsHtml(html.outerHTML);
@@ -58,9 +52,9 @@ app.controller('Editor', function($scope, $http, $sanitize, $sce) {
       url: 'markdown/' + fn
     }).success(function(data, status, headers, config) {
       $scope.haveFileSelected = true;
-      updateHtml(data);
       $scope.markdown.current = data;
       $scope.markdown.original = data;
+      $scope.updateMd(data);
       return $scope.editor.$setPristine();
     });
   };

@@ -10,6 +10,8 @@ app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 	$scope.markdown = {
 		current: '',
 		original: '',
+		diff: '',
+		html: '',
 	}
 	
 	# ---------------------------------------------
@@ -21,51 +23,37 @@ app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 	]
 	
 	# ---------------------------------------------
-	# Update HTML variable
-	# @param md String
-	# ---------------------------------------------
-	updateHtml = (md) ->
-		html = converter.makeHtml md
-		$scope.markdown.current = angular.copy md
-		$scope.htmlPreview = html
-	
-	# ---------------------------------------------
 	# Calculate diff between the current markdown
 	# and the original markdown.
+	# @param md String
 	# @return Html
 	# ---------------------------------------------
-	diffMd = () ->
+	createMarkdownDiff = (md) ->
 		oldtxt = difflib.stringAsLines $scope.markdown.original
-		newtxt = difflib.stringAsLines $scope.markdown.current
-		console.log oldtxt
-		console.log newtxt
+		newtxt = difflib.stringAsLines md
 		sm = new difflib.SequenceMatcher oldtxt, newtxt
 		opcodes = sm.get_opcodes()
 		return diffview.buildView {
 			baseTextLines: oldtxt,
 			newTextLines: newtxt,
 			opcodes: opcodes,
-			baseTextName: "Base Text",
+			baseTextName: "Original Text",
 			newTextName: "New Text",
 			contextSize: 0,
 			viewType: 0,
 		}
-		
-	# Keep an eye on our scope
-	#$scope.$watch (scope) ->
-		#console.log scope.markdown.current
-	
+
 	# ---------------------------------------------
 	# Listens to updates to markdown
 	# @param md String
 	# ---------------------------------------------
 	$scope.updateMd = (md) ->
-		updateHtml md
-		$scope.mdDiffView = diffMd()
+		$scope.markdown.html = converter.makeHtml md
+		$scope.markdown.diff = createMarkdownDiff md
 		return
 	
 	# ---------------------------------------------
-	# Strict contextual escaping for DiffView
+	# Strict contextual escaping for HTML
 	# @param html Html
 	# @return String
 	# ---------------------------------------------
@@ -81,9 +69,9 @@ app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 		$http({method: 'GET', url: 'markdown/'+fn})
 			.success (data, status, headers, config) =>
 				$scope.haveFileSelected = true
-				updateHtml data
 				$scope.markdown.current = data
 				$scope.markdown.original = data
+				$scope.updateMd data
 				$scope.editor.$setPristine()
 	
 	# ---------------------------------------------
