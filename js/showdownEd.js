@@ -4,9 +4,10 @@ var app;
 app = angular.module('showdownEd', ['ngSanitize']);
 
 app.controller('Editor', function($scope, $http, $sanitize, $sce) {
-  var backendPath, converter, createMarkdownDiff,
+  var backendPath, converter, createMarkdownDiff, receiver, setCleanForm,
     _this = this;
   backendPath = "backend/";
+  receiver = "receiver.php";
   $scope.markdown = {
     current: '',
     original: '',
@@ -42,21 +43,35 @@ app.controller('Editor', function($scope, $http, $sanitize, $sce) {
   $scope.toTrusted = function(html) {
     return $sce.trustAsHtml(html.outerHTML);
   };
+  setCleanForm = function(md) {
+    $scope.markdown.current = md;
+    $scope.markdown.original = md;
+    $scope.updateMd(md);
+    return $scope.editor.$setPristine();
+  };
   $scope.selectFile = function() {
     var fn,
       _this = this;
     fn = $scope.selectedFile.name;
-    return $http({
-      method: 'GET',
-      url: backendPath + 'markdown/' + fn
-    }).success(function(data, status, headers, config) {
+    return $http.get(backendPath + 'markdown/' + fn).success(function(data, status, headers, config) {
       $scope.haveFileSelected = true;
-      $scope.markdown.current = data;
-      $scope.markdown.original = data;
-      $scope.updateMd(data);
-      return $scope.editor.$setPristine();
+      return setCleanForm(data);
     }).error(function(data, status, headers, config) {
       return console.log(status + ": file not found");
+    });
+  };
+  $scope.submitMd = function() {
+    var sendData,
+      _this = this;
+    sendData = {
+      file: $scope.selectedFile.name,
+      content: $scope.markdown.current
+    };
+    return $http.post(backendPath + receiver, sendData).success(function(data, status, headers, config) {
+      setCleanForm($scope.markdown.current);
+      return console.log(data);
+    }).error(function(data, status, headers, config) {
+      return console.log(status + ": save didn't happen");
     });
   };
   return true;

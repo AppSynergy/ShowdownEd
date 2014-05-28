@@ -6,6 +6,7 @@ app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 	# Substitute this for an actual server backend
 	# ---------------------------------------------
 	backendPath = "backend/"
+	receiver = "receiver.php"
 	
 	# ---------------------------------------------
 	# Main scope object
@@ -34,7 +35,6 @@ app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 	$http.get(backendPath+'files.json')
 		.success (data) =>
 			$scope.files = data.files
-
 	
 	# ---------------------------------------------
 	# Calculate diff between the current markdown
@@ -75,19 +75,42 @@ app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 		return $sce.trustAsHtml html.outerHTML
 	
 	# ---------------------------------------------
+	# Assume we have a clean slate
+	# @param md String
+	# ---------------------------------------------
+	setCleanForm = (md) ->
+		$scope.markdown.current = md
+		$scope.markdown.original = md
+		$scope.updateMd md
+		$scope.editor.$setPristine()
+
+	# ---------------------------------------------
 	# Select a file to edit
 	# ---------------------------------------------
 	$scope.selectFile = () ->
 		fn = $scope.selectedFile.name
-		$http({method: 'GET', url: backendPath+'markdown/'+fn})
+		$http.get(backendPath+'markdown/'+fn)
 			.success (data, status, headers, config) =>
 				$scope.haveFileSelected = true
-				$scope.markdown.current = data
-				$scope.markdown.original = data
-				$scope.updateMd data
-				$scope.editor.$setPristine()
+				setCleanForm data
 			.error (data, status, headers, config) =>
 				console.log status+": file not found"
+	
+	# ---------------------------------------------
+	# Submit the edited markdown
+	# ---------------------------------------------
+	$scope.submitMd = () ->
+		sendData = {
+			file: $scope.selectedFile.name
+			content: $scope.markdown.current
+		}
+		$http.post(backendPath+receiver, sendData)
+			.success (data, status, headers, config) =>
+				setCleanForm $scope.markdown.current
+				# Check the receiver is receiving
+				console.log data
+			.error (data, status, headers, config) =>
+				console.log status+": save didn't happen"
 	
 	# ---------------------------------------------
 	# Default controller return value
