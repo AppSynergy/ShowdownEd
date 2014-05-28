@@ -1,9 +1,5 @@
-##This is demo 2
+##This is the second demo file.
 
-Foo
+I've actually edited and saved this using this editor now.
 
-Bar
-
-* la
-* lala
-* lalala
+**NB:** receiver.php is not for production!!!
