@@ -4,22 +4,21 @@ var app;
 app = angular.module('showdownEd', ['ngSanitize']);
 
 app.controller('Editor', function($scope, $http, $sanitize, $sce) {
-  var converter, createMarkdownDiff;
-  converter = new Showdown.converter();
-  $scope.haveFileSelected = false;
+  var backendPath, converter, createMarkdownDiff,
+    _this = this;
+  backendPath = "backend/";
   $scope.markdown = {
     current: '',
     original: '',
     diff: '',
     html: ''
   };
-  $scope.files = [
-    {
-      name: 'demo.md'
-    }, {
-      name: 'demo2.md'
-    }
-  ];
+  converter = new Showdown.converter();
+  $scope.files = [];
+  $scope.haveFileSelected = false;
+  $http.get(backendPath + 'files.json').success(function(data) {
+    return $scope.files = data.files;
+  });
   createMarkdownDiff = function(md) {
     var newtxt, oldtxt, opcodes, sm;
     oldtxt = difflib.stringAsLines($scope.markdown.original);
@@ -49,13 +48,15 @@ app.controller('Editor', function($scope, $http, $sanitize, $sce) {
     fn = $scope.selectedFile.name;
     return $http({
       method: 'GET',
-      url: 'markdown/' + fn
+      url: backendPath + 'markdown/' + fn
     }).success(function(data, status, headers, config) {
       $scope.haveFileSelected = true;
       $scope.markdown.current = data;
       $scope.markdown.original = data;
       $scope.updateMd(data);
       return $scope.editor.$setPristine();
+    }).error(function(data, status, headers, config) {
+      return console.log(status + ": file not found");
     });
   };
   return true;

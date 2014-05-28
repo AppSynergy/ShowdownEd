@@ -2,11 +2,14 @@ app = angular.module('showdownEd', ['ngSanitize'])
 
 app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 	
-	# Showdown Converter
-	converter = new Showdown.converter()
+	# ---------------------------------------------
+	# Substitute this for an actual server backend
+	# ---------------------------------------------
+	backendPath = "backend/"
 	
-	# We haven't chosen a file yet
-	$scope.haveFileSelected = false
+	# ---------------------------------------------
+	# Main scope object
+	# ---------------------------------------------
 	$scope.markdown = {
 		current: '',
 		original: '',
@@ -15,12 +18,23 @@ app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 	}
 	
 	# ---------------------------------------------
-	# Demo files - replace with proper interface
+	# Showdown Converter
 	# ---------------------------------------------
-	$scope.files = [
-		{name:'demo.md'},
-		{name:'demo2.md'},
-	]
+	converter = new Showdown.converter()
+	
+	# ---------------------------------------------
+	# Open without a file selected
+	# ---------------------------------------------
+	$scope.files = []
+	$scope.haveFileSelected = false
+	
+	# ---------------------------------------------
+	# Get the list of files we can edit
+	# ---------------------------------------------	
+	$http.get(backendPath+'files.json')
+		.success (data) =>
+			$scope.files = data.files
+
 	
 	# ---------------------------------------------
 	# Calculate diff between the current markdown
@@ -64,15 +78,16 @@ app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 	# Select a file to edit
 	# ---------------------------------------------
 	$scope.selectFile = () ->
-		#console.log $scope.selectedFile
 		fn = $scope.selectedFile.name
-		$http({method: 'GET', url: 'markdown/'+fn})
+		$http({method: 'GET', url: backendPath+'markdown/'+fn})
 			.success (data, status, headers, config) =>
 				$scope.haveFileSelected = true
 				$scope.markdown.current = data
 				$scope.markdown.original = data
 				$scope.updateMd data
 				$scope.editor.$setPristine()
+			.error (data, status, headers, config) =>
+				console.log status+": file not found"
 	
 	# ---------------------------------------------
 	# Default controller return value
