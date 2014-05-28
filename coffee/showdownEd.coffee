@@ -7,7 +7,10 @@ app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 	
 	# We haven't chosen a file yet
 	$scope.haveFileSelected = false
-	$scope.currentMarkdown = ''
+	$scope.markdown = {
+		current: '',
+		original: '',
+	}
 	
 	# ---------------------------------------------
 	# Demo files - replace with proper interface
@@ -23,8 +26,8 @@ app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 	# ---------------------------------------------
 	updateHtml = (md) ->
 		html = converter.makeHtml md
-		$scope.currentMarkdown = angular.copy md
-		$scope.currentHtml = html
+		$scope.markdown.current = angular.copy md
+		$scope.htmlPreview = html
 	
 	# ---------------------------------------------
 	# Calculate diff between the current markdown
@@ -32,8 +35,8 @@ app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 	# @return Html
 	# ---------------------------------------------
 	diffMd = () ->
-		oldtxt = difflib.stringAsLines $scope.originalMarkdown
-		newtxt = difflib.stringAsLines $scope.currentMarkdown
+		oldtxt = difflib.stringAsLines $scope.markdown.original
+		newtxt = difflib.stringAsLines $scope.markdown.current
 		console.log oldtxt
 		console.log newtxt
 		sm = new difflib.SequenceMatcher oldtxt, newtxt
@@ -50,7 +53,7 @@ app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 		
 	# Keep an eye on our scope
 	#$scope.$watch (scope) ->
-		#console.log scope.currentMarkdown
+		#console.log scope.markdown.current
 	
 	# ---------------------------------------------
 	# Listens to updates to markdown
@@ -79,8 +82,8 @@ app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 			.success (data, status, headers, config) =>
 				$scope.haveFileSelected = true
 				updateHtml data
-				$scope.currentMarkdown = data
-				$scope.originalMarkdown = data
+				$scope.markdown.current = data
+				$scope.markdown.original = data
 				$scope.editor.$setPristine()
 	
 	# ---------------------------------------------

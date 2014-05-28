@@ -23,7 +23,7 @@
 					ng-change="selectFile();"
 				></select>
 				<hr>
-				
+			
 				<div ng-switch on="editor.$pristine">
 					<p ng-switch-when="false">Unsaved changes!</p>
 					<p ng-switch-when="true">Everything is up to date.</p>
@@ -34,12 +34,12 @@
 						<form name="editor">
 						<textarea name="markdown"
 							ng-switch-when="true"
-							ng-change="updateMd(currentMarkdown);"
-							ng-model="currentMarkdown"></textarea>
+							ng-change="updateMd(markdown.current);"
+							ng-model="markdown.current"></textarea>
 						</form>
 					</div>
 					<div class="col col-xs-6" data-html>
-						<div ng-bind-html="currentHtml"></div>
+						<div ng-bind-html="htmlPreview"></div>
 					</div>
 				</div><!-- row -->
 				

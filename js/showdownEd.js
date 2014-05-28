@@ -7,7 +7,10 @@ app.controller('Editor', function($scope, $http, $sanitize, $sce) {
   var converter, diffMd, updateHtml;
   converter = new Showdown.converter();
   $scope.haveFileSelected = false;
-  $scope.currentMarkdown = '';
+  $scope.markdown = {
+    current: '',
+    original: ''
+  };
   $scope.files = [
     {
       name: 'demo.md'
@@ -18,13 +21,13 @@ app.controller('Editor', function($scope, $http, $sanitize, $sce) {
   updateHtml = function(md) {
     var html;
     html = converter.makeHtml(md);
-    $scope.currentMarkdown = angular.copy(md);
-    return $scope.currentHtml = html;
+    $scope.markdown.current = angular.copy(md);
+    return $scope.htmlPreview = html;
   };
   diffMd = function() {
     var newtxt, oldtxt, opcodes, sm;
-    oldtxt = difflib.stringAsLines($scope.originalMarkdown);
-    newtxt = difflib.stringAsLines($scope.currentMarkdown);
+    oldtxt = difflib.stringAsLines($scope.markdown.original);
+    newtxt = difflib.stringAsLines($scope.markdown.current);
     console.log(oldtxt);
     console.log(newtxt);
     sm = new difflib.SequenceMatcher(oldtxt, newtxt);
@@ -56,8 +59,8 @@ app.controller('Editor', function($scope, $http, $sanitize, $sce) {
     }).success(function(data, status, headers, config) {
       $scope.haveFileSelected = true;
       updateHtml(data);
-      $scope.currentMarkdown = data;
-      $scope.originalMarkdown = data;
+      $scope.markdown.current = data;
+      $scope.markdown.original = data;
       return $scope.editor.$setPristine();
     });
   };
