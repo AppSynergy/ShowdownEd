@@ -19,6 +19,11 @@ app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 	}
 	
 	# ---------------------------------------------
+	# Text Selection for GUI editing
+	# ---------------------------------------------
+	selectionText = ''
+	
+	# ---------------------------------------------
 	# Showdown Converter
 	# ---------------------------------------------
 	converter = new Showdown.converter()
@@ -111,6 +116,27 @@ app.controller 'Editor', ($scope, $http, $sanitize, $sce) ->
 				console.log data
 			.error (data, status, headers, config) =>
 				console.log status+": save didn't happen"
+	
+	
+	# Click on GUI buttons
+	$scope.editGui = () ->
+		if $scope.haveFileSelected
+			console.log selectionText
+			selectionText = ''
+	
+	# Watch for text selection
+	# Maybe this can make a sensible system for formatting buttons, etc.
+	$scope.getSelectionText = () ->
+		text = ''
+		if window.getSelection
+			text = window.getSelection().toString()
+		else if document.getSelection
+			text = document.getSelection().toString()
+		else if (document.selection && document.selection.type != "Control")
+			text = document.selection.createRange().text
+		if text.length <= 0
+			text = "NONE"
+		selectionText = text
 	
 	# ---------------------------------------------
 	# Default controller return value

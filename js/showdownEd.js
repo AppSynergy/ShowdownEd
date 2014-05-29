@@ -4,7 +4,7 @@ var app;
 app = angular.module('showdownEd', ['ngSanitize']);
 
 app.controller('Editor', function($scope, $http, $sanitize, $sce) {
-  var backendPath, converter, createMarkdownDiff, receiver, setCleanForm,
+  var backendPath, converter, createMarkdownDiff, receiver, selectionText, setCleanForm,
     _this = this;
   backendPath = "backend/";
   receiver = "receiver.php";
@@ -14,6 +14,7 @@ app.controller('Editor', function($scope, $http, $sanitize, $sce) {
     diff: '',
     html: ''
   };
+  selectionText = '';
   converter = new Showdown.converter();
   $scope.files = [];
   $scope.haveFileSelected = false;
@@ -73,6 +74,27 @@ app.controller('Editor', function($scope, $http, $sanitize, $sce) {
     }).error(function(data, status, headers, config) {
       return console.log(status + ": save didn't happen");
     });
+  };
+  $scope.editGui = function() {
+    if ($scope.haveFileSelected) {
+      console.log(selectionText);
+      return selectionText = '';
+    }
+  };
+  $scope.getSelectionText = function() {
+    var text;
+    text = '';
+    if (window.getSelection) {
+      text = window.getSelection().toString();
+    } else if (document.getSelection) {
+      text = document.getSelection().toString();
+    } else if (document.selection && document.selection.type !== "Control") {
+      text = document.selection.createRange().text;
+    }
+    if (text.length <= 0) {
+      text = "NONE";
+    }
+    return selectionText = text;
   };
   return true;
 });
